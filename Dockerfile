@@ -102,7 +102,8 @@ RUN set -eux; \
     pwntools \
     pycryptodome \
     ipython \
-    ipdb
+    ipdb \
+    libdebug
 
 
 ENV LANG=C.UTF-8
