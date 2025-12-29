@@ -1,0 +1,123 @@
+#!/usr/bin/env python3
+
+import argparse
+import logging
+import os
+from shlex import quote
+import subprocess
+import enum
+
+log = logging.Logger(__name__)
+log.level = logging.INFO
+
+info = log.info
+error = log.error
+debug = log.debug
+warning = log.warning
+
+
+def get_container_id():
+    with open(".pwntainer", "r") as f:
+        container_id = f.read().strip()
+        return container_id
+
+
+def init():
+    pwd = os.getcwd()
+    cont_name = os.path.basename(pwd)
+    # fmt: off
+    argv = [
+        "docker",
+        "container",
+        "create",
+        "--init", # This is to reap zombies
+        "--network", "host",
+        "--name", cont_name,
+        "--hostname", cont_name,
+        "-v", "/var/run/docker.sock:/var/run/docker.sock",
+        "-v", "/usr/bin/docker:/usr/local/bin/docker",
+        "-v", f"{pwd}:/home/ahab/work",
+        "pwntainer-next",
+        "sleep",
+        "infinity",
+    ]
+    # fmt: on
+
+    # Example: write container id to .pwntainer and init container
+    container_id = subprocess.check_output(argv).decode().strip()
+    with open(".pwntainer", "w") as f:
+        f.write(container_id)
+
+    info("Wrote contianer id to `.pwntainer`.")
+    start()
+    attach()
+
+
+def start():
+    info("Starting container. You gotta attach to it")
+    print(subprocess.getoutput("docker container start %s" % quote(get_container_id())))
+
+
+def stop():
+    info("Stopping container. Broke n***a just get some more ram and cpu.")
+    print(
+        subprocess.getoutput(
+            "docker container stop -t 3 %s" % quote(get_container_id())
+        )
+    )
+
+
+def attach():
+    # 1. Get container name from file ".pwntainer", or as argument.
+    # 2. Check if container is running / not.
+    # 3. If it's running, attach to it. If not, start it.
+    assert get_container_id() != "", "no container_id"
+
+    info("Attaching to container.")
+    os.execvp("docker", ["docker", "exec", "-it", get_container_id(), "/usr/bin/zsh"])
+    ...
+
+
+def dispose():
+    info("Removing container. This will delete all files stored in it. Good luck gng.")
+    print(subprocess.getoutput("docker container rm -f %s" % quote(get_container_id())))
+    # Rm's the container and it's assocated volumes
+    # Reads the container id from `.pwntainer`
+    ...
+
+
+parser = argparse.ArgumentParser(
+    prog="pwntainer",
+    description="manage containers for pwn",
+)
+
+
+class Action(enum.StrEnum):
+    init = "init"
+    start = "start"
+    stop = "stop"
+    attach = "attach"
+    dispose = "dispose"
+
+
+class Arguments:
+    action: Action
+
+
+parser.add_argument("action", choices=Action)
+args = Arguments()
+parser.parse_args(namespace=args)
+
+match args.action:
+    case Action.init:
+        init()
+    case Action.stop:
+        stop()
+    case Action.start:
+        start()
+    case Action.attach:
+        attach()
+    case Action.dispose:
+        dispose()
+    case _:
+        raise Exception("Not implemented")
