@@ -30,6 +30,8 @@ def init():
         "docker",
         "container",
         "create",
+        "--privileged",
+        "--cap-add=SYS_PTRACE",
         "--init", # This is to reap zombies
         "--network", "host",
         "--name", cont_name,
