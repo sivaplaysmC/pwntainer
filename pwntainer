@@ -101,6 +101,9 @@ class Action(enum.StrEnum):
     attach = "attach"
     dispose = "dispose"
 
+    def __str__(self):
+        return self.value
+
 
 class Arguments:
     action: Action
