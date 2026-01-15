@@ -38,6 +38,9 @@ RUN     apt update && \
         strace \
         ltrace \
         locales \
+        clangd \
+        clang-format \
+        jq \
         && \
         wget https://github.com/io12/pwninit/releases/download/3.3.1/pwninit -O /usr/local/bin/pwninit && \
         useradd -m -s /bin/zsh ahab && \
