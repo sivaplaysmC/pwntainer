@@ -58,7 +58,7 @@ RUN     cd /tmp && \
         cp -r nvim-linux-x86_64/* /usr/local && \
         rm -rf /tmp/*
 
-RUN curl -qsL 'https://install.pwndbg.re' | sh -s -- -t pwndbg-gdb
+RUN curl -qsL 'https://install.pwndbg.re' | sh -s -- -t pwndbg-gdb && ln -sf `which pwndbg` /usr/local/bin/pwntools-gdb
 
 USER ahab
 ENV HOME=/home/ahab
