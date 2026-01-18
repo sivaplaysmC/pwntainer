@@ -15,6 +15,7 @@ error = log.error
 debug = log.debug
 warning = log.warning
 
+CONTAINER = "ghcr.io/sivaplaysmc/pwntainer:latest"
 
 def get_container_id():
     with open(".pwntainer", "r") as f:
@@ -39,7 +40,7 @@ def init():
         "-v", "/var/run/docker.sock:/var/run/docker.sock",
         "-v", "/usr/bin/docker:/usr/local/bin/docker",
         "-v", f"{pwd}:/home/ahab/work",
-        "pwntainer-next",
+        CONTAINER,
         "sleep",
         "infinity",
     ]
