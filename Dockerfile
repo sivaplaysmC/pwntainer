@@ -99,6 +99,7 @@ RUN set -eux; \
 RUN set -eux; \
     \
     pip install --no-cache-dir --break-system-packages \
+    angr \
     gmpy2 \
     ruff \
     basedpyright \
