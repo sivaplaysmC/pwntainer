@@ -18,9 +18,14 @@ warning = log.warning
 CONTAINER = "ghcr.io/sivaplaysmc/pwntainer:latest"
 
 def get_container_id():
-    with open(".pwntainer", "r") as f:
-        container_id = f.read().strip()
+    try:
+        fh = open(".pwntainer", "r")
+        container_id = fh.read().strip()
+        fh.close()
         return container_id
+    except FileNotFoundError:
+        error("Now pwntainer found here. Exiting :(")
+        exit(42)
 
 
 def init():
