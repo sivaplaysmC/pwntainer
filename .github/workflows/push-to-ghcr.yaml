@@ -30,6 +30,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.MY_PAT }}
 
+      # Pull image, so that only new layers get rebuilt.
+      - name: pull current image
+        run: |
+          docker pull ${{ env.IMAGE_NAME }}:latest
+
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
