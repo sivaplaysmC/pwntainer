@@ -33,13 +33,5 @@ jobs:
       # Pull image, so that only new layers get rebuilt.
       - name: pull current image
         run: |
-          docker pull ${{ env.IMAGE_NAME }}:latest
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
-        with:
-          context: .
-          push: true
-          tags: |
-            ${{ env.IMAGE_NAME }}:latest
-            ${{ env.IMAGE_NAME }}:${{ github.sha }}
+          /usr/bin/docker pull ${{ env.IMAGE_NAME }}:latest
+          /usr/bin/docker buildx build -t ${{ env.IMAGE_NAME }}:latest -t ${{ env.IMAGE_NAME }}:${{ github.sha }} --push .
