@@ -17,6 +17,7 @@ warning = log.warning
 
 CONTAINER = "ghcr.io/sivaplaysmc/pwntainer:latest"
 
+
 def get_container_id():
     try:
         fh = open(".pwntainer", "r")
@@ -57,6 +58,11 @@ def init():
         f.write(container_id)
 
     info("Wrote contianer id to `.pwntainer`.")
+
+    tmpname = "/tmp/chall_%s" % cont_name
+    os.symlink(pwd, tmpname, target_is_directory=True)
+    info("Created symlink /home/ahab/work => /tmp/%s" % tmpname)
+
     start()
     attach()
 
