@@ -110,6 +110,8 @@ RUN set -eux; \
     ipdb \
     libdebug
 
+# Install ty
+RUN curl -LsSf https://astral.sh/ty/install.sh | sh
 
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
