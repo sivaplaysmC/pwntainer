@@ -30,8 +30,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.MY_PAT }}
 
-      # Pull image, so that only new layers get rebuilt.
-      - name: pull current image
+      - name: Build and push image
         run: |
-          /usr/bin/docker pull ${{ env.IMAGE_NAME }}:latest
           /usr/bin/docker buildx build -t ${{ env.IMAGE_NAME }}:latest -t ${{ env.IMAGE_NAME }}:${{ github.sha }} --push .
