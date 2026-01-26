@@ -42,7 +42,7 @@ RUN     apt update && \
         clang-format \
         jq \
         && \
-        wget https://github.com/io12/pwninit/releases/download/3.3.1/pwninit -O /usr/local/bin/pwninit && \
+        wget https://github.com/io12/pwninit/releases/download/3.3.1/pwninit -O /usr/local/bin/pwninit && chmod +x /usr/local/bin/pwninit \
         useradd -m -s /bin/zsh ahab && \
         usermod -aG sudo ahab && \
         echo "ahab ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/ahab && \
