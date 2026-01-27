@@ -29,6 +29,14 @@ def get_container_id():
         exit(42)
 
 
+def make_symlink():
+    pwd = os.getcwd()
+    cont_name = os.path.basename(pwd)
+    tmpname = "/tmp/chall_%s" % cont_name
+    os.symlink(pwd, tmpname, target_is_directory=True)
+    info("Created symlink /home/ahab/work => /tmp/%s" % tmpname)
+
+
 def init():
     pwd = os.getcwd()
     cont_name = os.path.basename(pwd)
@@ -58,16 +66,12 @@ def init():
         f.write(container_id)
 
     info("Wrote contianer id to `.pwntainer`.")
-
-    tmpname = "/tmp/chall_%s" % cont_name
-    os.symlink(pwd, tmpname, target_is_directory=True)
-    info("Created symlink /home/ahab/work => /tmp/%s" % tmpname)
-
     start()
     attach()
 
 
 def start():
+    make_symlink()
     info("Starting container. You gotta attach to it")
     print(subprocess.getoutput("docker container start %s" % quote(get_container_id())))
 
