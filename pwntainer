@@ -98,7 +98,7 @@ def attach():
 
 def dispose():
     info("Removing container. This will delete all files stored in it. Good luck gng.")
-    print(subprocess.getoutput("docker container rm -f %s" % quote(get_container_id())))
+    print(subprocess.getoutput("docker container rm -v -f %s" % quote(get_container_id())))
     # Rm's the container and it's assocated volumes
     # Reads the container id from `.pwntainer`
     ...
